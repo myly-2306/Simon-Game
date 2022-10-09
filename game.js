@@ -16,25 +16,42 @@ function nextSequence(max) {
 
     setInterval(() => {$('#' + randomChosenColor).fadeOut().fadeIn()},500);
 
-    var queryRandomId = $('#' + randomChosenColor);
+};
+
+// handle button clicked to get button id
+function handleButtonClicked() {
+    var userChosenColor = $(this).attr('id');
+    console.log("user chosen color",userChosenColor)
+    // add the contents of the var userChosenColor to the end of the userClickedPattern
+    userClickedPattern.push(userChosenColor);
+    console.log(userClickedPattern)
+    playSound(userChosenColor);
+};
+
+
+// function that play sound when a a button clicked
+function playSound(name) {
+    // var queryRandomId = $('#' + randomChosenColor);
+    // var queryRandomId = $(name);
+    // console.log("name",name)
     var audio 
-    switch (queryRandomId) {
-        case green:
+    switch (name) {
+        case "green":
             audio = new Audio('sounds/green.mp3')
             audio.play();
             break;
 
-        case red:
+        case "red":
             audio = new Audio('sounds/red.mp3')
             audio.play();
             break;
 
-        case yellow:
+        case "yellow":
             audio = new Audio('sounds/yellow.mp3')
             audio.play();
             break;
 
-        case blue:
+        case "blue":
             audio = new Audio('sounds/blue.mp3')
             audio.play();
             break;
@@ -44,21 +61,10 @@ function nextSequence(max) {
             audio.play();
             break;
     }
-
-    // var audio = new Audio("sounds/" + randomChosenColour + ".mp3");
+    // alternatively, this is the short way
+    // var audio = new Audio("sounds/" + name + ".mp3");
     // audio.play();
-};
-
-// handle button clicked to get button id
-function handleButtonClicked() {
-    var userChosenColor = $(this).attr('id');
-    // add the contents of the var userChosenColor to the end of the userClickedPattern
-    userClickedPattern.push(userChosenColor);
-    console.log(userClickedPattern)
-};
-
-
-// function that play sound when a a button clicked
+}
 
 
 buttonClicked.on('click', handleButtonClicked);
