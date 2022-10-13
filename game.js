@@ -21,11 +21,12 @@ function nextSequence(max) {
 // handle button clicked to get button id
 function handleButtonClicked() {
     var userChosenColor = $(this).attr('id');
-    console.log("user chosen color",userChosenColor)
+    // console.log("user chosen color",userChosenColor)
     // add the contents of the var userChosenColor to the end of the userClickedPattern
     userClickedPattern.push(userChosenColor);
     console.log(userClickedPattern)
     playSound(userChosenColor);
+    animatePress(userChosenColor);
 };
 
 
@@ -64,6 +65,16 @@ function playSound(name) {
     // alternatively, this is the short way
     // var audio = new Audio("sounds/" + name + ".mp3");
     // audio.play();
+}
+
+
+// function to display animation when button is clicked
+function animatePress(currentColor) {
+    $('#' + currentColor).addClass("pressed");
+
+    setInterval(function(){
+        $('#' + currentColor).removeClass("pressed")
+    },100);
 }
 
 
