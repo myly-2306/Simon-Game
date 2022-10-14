@@ -2,31 +2,57 @@ var buttonColors = ["red", "blue", "green", "yellow"];
 var gamePattern = [];
 var buttonClicked = $('.btn');
 var userClickedPattern = [];
+var started = false;
+var level = 0;
 
-function nextSequence(max) {
+
+$(document).keypress(function(){
+    if(!started) {
+        nextSequence();
+        $("#level-title").text("Level" + " " + level)
+        started = true;
+    }
+})
+
+
+function nextSequence() {
+
+    // when nextSequence() is triggered, reset userClickedPattern to an empty array
+    // userClickedPattern = [];
+
+    var levelUp = level++;
+    $("#level-title").text("Level" + " " + levelUp);
+
     // generate a new random number between 0 and 3, and store it in a variable called randomNumber
-    var randomNumber = Math.floor(Math.random() * max);
-    console.log(randomNumber)
+    var randomNumber = Math.floor(Math.random() * 4);
+    // console.log(randomNumber)
     // new variable called randomChosenColour and use the randomNumber above to select a random colour from the buttonColours array.
     var randomChosenColor = buttonColors[randomNumber]
 
     // Add the new randomChosenColour generated above to the end of the gamePattern.
-    gamePattern = gamePattern.push(randomChosenColor);
-    console.log("gamepattern", gamePattern);
+    gamePattern.push(randomChosenColor);
+    // console.log("gamepattern", gamePattern);
 
-    setInterval(() => {$('#' + randomChosenColor).fadeOut().fadeIn()},500);
+    setTimeout(() => {$('#' + randomChosenColor).fadeOut().fadeIn()},500);
+
+    
 
 };
 
 // handle button clicked to get button id
-function handleButtonClicked() {
+function handleButtonClicked(event) {
+    event.preventDefault();
+
     var userChosenColor = $(this).attr('id');
     // console.log("user chosen color",userChosenColor)
     // add the contents of the var userChosenColor to the end of the userClickedPattern
     userClickedPattern.push(userChosenColor);
-    console.log(userClickedPattern)
+    console.log("user click pattern" + " " + userClickedPattern)
+
     playSound(userChosenColor);
     animatePress(userChosenColor);
+
+    checkAnswer(userClickedPattern.length-1);
 };
 
 
@@ -58,8 +84,8 @@ function playSound(name) {
             break;
     
         default:
-            audio = new Audio("sounds/wrong.mp3")
-            audio.play();
+            // audio = new Audio("sounds/wrong.mp3")
+            // audio.play();
             break;
     }
     // alternatively, this is the short way
@@ -78,6 +104,28 @@ function animatePress(currentColor) {
 }
 
 
+// function to check user answer
+function checkAnswer(currentLevel) {
+    if (userClickedPattern[currentLevel] == gamePattern[currentLevel]) {
+        console.log("success")
+        // check if the user have finshed their sequence
+       if (userClickedPattern.length === gamePattern.length) {
+            setTimeout(function() {
+                nextSequence()
+            },1000)
+            // console.log("userPattern Length" + userClickedPattern.length)
+        }
+    } else {
+        console.log("wrong");
+        audio = new Audio("sounds/wrong.mp3")
+        audio.play();
+    }
+    
+
+    console.log("user current level" + " " +  userClickedPattern[currentLevel])
+    console.log("game level" + " " + gamePattern[currentLevel])
+}
+
 buttonClicked.on('click', handleButtonClicked);
-nextSequence(4)
+nextSequence()
 
